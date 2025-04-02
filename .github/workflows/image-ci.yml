@@ -31,7 +31,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./client-react
-          file: ./client-react/Dockerfile.3
+          file: ../Dockerfile.3
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/docker-compose-development:client-react-nginx
 
@@ -39,7 +39,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./client-react
-          file: ./client-react/Dockerfile.2
+          file: ../Dockerfile.2
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/docker-compose-development:client-react-vite
 
@@ -47,7 +47,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./api-node
-          file: ./api-node/Dockerfile.4
+          file: ../Dockerfile.4
           target: production
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/docker-compose-development:api-node
@@ -56,7 +56,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./api-golang
-          file: ./api-golang/Dockerfile.5
+          file: ../Dockerfile.5
           target: build-production
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/docker-compose-development:api-golang
