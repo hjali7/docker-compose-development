@@ -37,15 +37,15 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
-          file: ./06-building-container-images/api-node/Dockerfile.8
-          context: ./05-example-web-application/api-node/
+          file: ./Dockerfile.4
+          context: ./api-node
           push: true
           tags: ${{ steps.meta.outputs.tags }}
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: 'sidpalas/devops-directive-docker-course-api-node:latest'
+          image-ref: '${{ secret.DOCKER_USERNAME }}/devops-directive-docker-course-api-node:latest'
           format: 'table'
           exit-code: '1'
           ignore-unfixed: true
