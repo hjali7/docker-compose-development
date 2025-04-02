@@ -31,7 +31,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./client-react
-          file: ../Dockerfile.3
+          file: Dockerfile.3
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/docker-compose-development:client-react-nginx
 
