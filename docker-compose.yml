@@ -1,0 +1,89 @@
+services:
+  client-react-vite:
+    image: client-react-vite
+    build:
+      context: ./client-react
+      dockerfile: Dockerfile.2
+    init: true
+    volumes:
+      - type: bind
+        source: ./client-react
+        target: /usr/src/app
+      - type: volume
+        target: /usr/src/app/node_modules
+      - type: bind
+        source: ./client-react/vite.config.js
+    networks:
+      - frontend
+    ports:
+      - 5173:5173
+  client-react-nginx:
+    image: client-react-nginx
+    build:
+      context: ./client-react
+      dockerfile: Dockerfile.3
+    init: true
+    networks:
+      - frontend
+    ports:
+      - 80:8080
+    restart: unless-stopped
+  api-node:
+    image: ./api-node
+    build:
+      context: ./api-node
+      dockerfile: Dockerfile.4
+      target: production
+    init: true
+    volumes:
+      - type: bind
+        source: ./api-node
+        target: /usr/src/app
+      - type: volume
+        target: /usr/src/app/node_modules
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgres://postgres:foobarbaz@db:5432/postgres
+    networks:
+      - frontend
+      - backend
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+  api-golang:
+    image: api-golang
+    build:
+      context: ./api-golang
+      dockerfile: Dockerfile.5
+      target: build-production
+    init: true
+    volumes:
+      - type: bind
+        source: ./api-golang
+        target: /app/
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgres://postgres:foobarbaz@db:5432/postgres
+    networks:
+      - frontend
+      - backend
+    ports:
+      - 8080:8080
+    restart: unless-stopped
+  db:
+    image: postgres:15.1-alpine
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=foobarbaz
+    networks:
+      - backend
+    ports:
+      - 5432:5432
+volumes:
+  pgdata:
+networks:
+  frontend:
+  backend:

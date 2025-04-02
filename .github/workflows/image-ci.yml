@@ -1,0 +1,43 @@
+name: image-ci
+
+on:
+  push:
+    branches: 
+      - 'master'
+      - 'imageci'
+    tags: 
+      - 'v*'
+      - 'releas*'
+jobs:
+  build-tag-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images:
+            alihajizadeh/docker-compose-development
+          tags:
+            type=raw,value=latest
+            type=red,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{vestion}}
+            typersemver,pattern={{major}}.{{minor}}
+            type=raw,value={{date 'YYYYMMDD'}}--{{sha}}
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          file: ./Dockerfile.8
+          context: ./api-node
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+  
