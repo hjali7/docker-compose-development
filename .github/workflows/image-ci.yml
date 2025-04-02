@@ -31,7 +31,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./client-react
-          file: ./client-react/Dockerfile.3
+          file: ./client-react/Dockerfile.2
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/docker-compose-development:client-react-nginx
 
@@ -39,7 +39,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./client-react
-          file: ./client-react/Dockerfile.2
+          file: ./client-react/Dockerfile.3
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/docker-compose-development:client-react-vite
 
